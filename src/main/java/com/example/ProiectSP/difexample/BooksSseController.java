@@ -21,16 +21,11 @@ public class BooksSseController {
 
     @GetMapping(value = "/books-sse", produces = "text/event-stream")
     public SseEmitter streamBooks() {
-        // Create a new SseEmitter for the incoming client connection
         SseEmitter emitter = new SseEmitter();
-
-        // Create a new observer for this client and attach it to the AllBooksSubject
         SseObserver observer = new SseObserver(emitter);
         allBooksSubject.attach(observer);
 
-        ObjectMapper objectMapper = new ObjectMapper();  // ObjectMapper for converting objects to JSON
-
-        // Send the current list of books to the new client immediately
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             for (Book book : allBooksSubject.getAllBooks()) {
                 // Serialize the book object to JSON
